@@ -1,0 +1,11 @@
+amazonProperties:
+  endpointUrl: https://s3.us-east-2.amazonaws.com
+  accessKey: AKIAIPWOSKNGIG2UHLOA
+  secretKey: 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
+  bucketName: new-bucket-meg
+  app_client_id: ma2pmrrkbb98f5slerm8gc268
+  user_pool_id: us-east-2_s5ZBksE6a
+  
+multipart:
+    maxFileSize: 10Mb
+    maxRequestSize: 10Mb
