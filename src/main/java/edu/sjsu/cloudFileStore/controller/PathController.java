@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.QueryParam;
 
 import org.apache.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -199,6 +202,13 @@ public class PathController {
 		
 	}
 	
+	@GetMapping("/adminfilelist")
+	public List<FileUploader> FetchFileidsforAdmin(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse,@QueryParam("username") String username) {
+		List<FileUploader> FileIdsofUser = new ArrayList<>();
+	//	FileIdsofUser = DynamoDBActions.fetchFilenamesforAdmin(username);
+		httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+		return FileIdsofUser;
+	} 
 	/*@RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<UserFilesDTO> uploadFile(
