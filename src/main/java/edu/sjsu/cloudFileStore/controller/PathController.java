@@ -191,6 +191,14 @@ public class PathController {
 		
 	}
 	
+	@PostMapping("/updatefile")
+	public String updateFile(@QueryParam("username") String username, @QueryParam("password") String password) {
+		AuthenticationHelper helper = new AuthenticationHelper(user_pool_id, app_client_id, secretKey);
+		return helper.PerformSRPAuthentication(username, password);
+		
+		
+	}
+	
 	/*@RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<UserFilesDTO> uploadFile(
