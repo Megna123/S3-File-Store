@@ -15,70 +15,74 @@
 </head>
 
 <body ng-controller="HomeController as ctrl">
-
-	<div class="container" ng-controller="HomeController as ctrl">
-		<div class="panel-body">
-			<h2 class="text-left">File Manager</h2>
+<div class="jumbotron">
+	<div ng-controller="HomeController as ctrl">
+	<!-- 	<div class="panel-body">-->
+			<p class="text-left">File Manager</p>
 			<div class="text-right">
 				<a href="#/login" class="btn btn-link">Logout</a>
 			</div>
-		</div>
+	<!--	</div> -->
 		<div class="panel panel-default">
 			<div class="panel-body">
 
 				<div class="form-group">
-					<label for="myFileField">Select a file: </label> 
-					<input type="file" id="myFile" file-model="myFile"/>
+					<label for="myFileField">Select a file: </label> <input type="file"
+						id="myFile" file-model="myFile" />
 				</div>
 				<form class="form-inline">
 					<div class="form-group">
 						<label for="exampleInputName2">Description</label> <input
-							type="text" class="form-control" id="exampleInputName2"
+							type="text" class="form-control" id="desc" ng-model="desc"
 							placeholder="Enter description">
 					</div>
 
-					<button ng-click="uploadFiletest()" class="btn btn-primary">Upload
+					<button ng-click="uploadFile()" class="btn btn-primary">Upload
 						File</button>
 				</form>
 
 			</div>
 		</div>
-<!-- div ng-show="error" class="alert alert-danger">{{error}}</div-->
-	
+		<!-- div ng-show="error" class="alert alert-danger">{{error}}</div-->
+
 		<div class="generic-container">
 			<div class="panel panel-default">
 				<div class="tablecontainer">
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>ID.</th>
-								<th>Name</th>
-								<th>Address</th>
-								<th>Email</th>
-								<th width="20%"></th>
+								<th>First Name</th>
+								<th>Last Name</th>
+								<th>File Name</th>
+								<th>Upload Time</th>
+								<th>Updated Time</th>
+								<th>Description</th>
+								<th>Actions</th>								
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="f in ctrl.files">
-								<td><span ng-bind="f.fileName"></span></td>
-								<td><span ng-bind="f.userName"></span></td>
-								<td><span ng-bind="f.fileID"></span></td>
 								<td><span ng-bind="f.firstName"></span></td>
+								<td><span ng-bind="f.lastName"></span></td>
+								<td><span ng-bind="f.fileName"></span></td>
+								<td><span ng-bind="f.fileUploadTime"></span></td>
+								<td><span ng-bind="f.fileUpdatedTime"></span></td>
+								<td><span ng-bind="f.fileDescription"></span></td>
 								<td>
-									<button type="button" ng-click="edit(f.fileName)"
+									<!--  button type="button" ng-click="edit(f.fileName)"
 										class="btn btn-info btn-sm" data-toggle="modal"
-										data-target="#editModal">
-										<span class="glyphicon glyphicon-pencil"></span>
-									</button>
+										data-target="#editModal"--> <!-- span class="glyphicon glyphicon-pencil"></span>
+									</button-->
+									 <input type="file" id="uploadfilemodel" file-model="uploadfilemodel" />
+									<button ng-click="updateFile(f.fileID,f.fileName)"
+										class="btn btn-primary">Update</button>
 
 									<button type="button" ng-click="download(f.fileName)"
-										class="btn btn-success btn-sm">
-										<span class="glyphicon glyphicon-download-alt"></span>
-									</button>
-									<button type="button" ng-click="delete(f.fileName)"
-										class="btn btn-danger btn-sm" data-toggle="modal"
-										data-target="#deleteModal">
-										<span class="glyphicon glyphicon-trash"></span>
+										class="btn btn-success btn-lg">Download</button>
+										<!-- <span class="glyphicon glyphicon-download-alt"></span>  -->
+									<button type="button" ng-click="deleteFile(f.fileName)"
+										class="btn btn-danger btn-lg">Delete</button>
+									<!-- 	<span class="glyphicon glyphicon-trash"></span> -->
 									</button>
 								</td>
 							</tr>
@@ -88,8 +92,7 @@
 			</div>
 		</div>
 	</div>
-
-
+</div>
 
 </body>
 

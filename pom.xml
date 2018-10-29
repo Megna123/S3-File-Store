@@ -9,7 +9,6 @@
 	<name>S3CloudFileStore Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -30,6 +29,8 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -81,7 +82,10 @@
 		</dependency>
 
 	</dependencies>
+	
+	
 	<build>
 		<finalName>S3CloudFileStore</finalName>
 	</build>
+	
 </project>

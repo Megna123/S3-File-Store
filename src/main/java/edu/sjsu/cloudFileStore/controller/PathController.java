@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,8 +44,8 @@ public class PathController {
 	private AmazonClient amazonClient;
 	
 	
-	/*Shishira stuff*/
-	@Value("${amazonProperties.bucketName}")
+	
+@Value("${amazonProperties.bucketName}")
 	private String bucketName;
 
 	@Value("${amazonProperties.app_client_id}")
@@ -66,7 +67,7 @@ public class PathController {
     PathController(AmazonClient amazonClient) {
         this.amazonClient = amazonClient;
     }
-	@RequestMapping(value = "/", method = RequestMethod.GET)	
+	@RequestMapping(value = "/S3CloudFileStore/", method = RequestMethod.GET)	
 	public String homepage(){
 		System.out.println("Login gng on");
 		return "index";
@@ -82,7 +83,8 @@ public class PathController {
 	 * To insert FileInfo to DB and to upload to S3
 	 */	
 	@PostMapping("/insertfile")
-	public ResponseEntity insertFiles(@RequestPart(value = "file") MultipartFile file, @QueryParam("username") String username)
+	public ResponseEntity insertFiles(@RequestPart(value = "file") MultipartFile file, @QueryParam("username") String username,
+			@QueryParam("filedesc") String fileDesc)
 			throws Exception {
 
 		Boolean isDBSuccess = false;
@@ -101,7 +103,7 @@ public class PathController {
 		}
 
 		isDBSuccess = DynamoDBActions.InsertFiletoDB(username, fname, lname,
-				file.getOriginalFilename(), new Random().nextInt());
+				file.getOriginalFilename(), new Random().nextInt(),fileDesc);
 		if (isDBSuccess) {
 			try {
 				isS3Success = amazonClient.uploadFile(username, file);
@@ -138,9 +140,11 @@ public class PathController {
 	
 	//check once
 	@PostMapping("/downloadfile")
-	public ResponseEntity<byte[]> downloadFilesforUser(@QueryParam("filename") String filename) {
-
-		ByteArrayOutputStream file = amazonClient.fetchFilesforUser(bucketName, filename);
+	public ResponseEntity<byte[]> downloadFilesforUser(@QueryParam("username") String username,
+			@QueryParam("filename") String filename) {
+		//String filenamewithUserName=amazonClient.generateFileName(username, filename);
+		String filenamewithUserName=username + "/" + filename.replace(" ", "_");
+		ByteArrayOutputStream file = amazonClient.fetchFilesforUser(bucketName, filenamewithUserName,username);
 		return ResponseEntity.ok().contentType(AmazonClient.contentType(filename))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
 				.body(file.toByteArray());
@@ -195,7 +199,7 @@ public class PathController {
 	
 	@PostMapping("/validateuser")
 	public ResponseEntity<String> ValidateUser(@QueryParam("username") String username, @QueryParam("password") String password) {
-		AuthenticationHelper helper = new AuthenticationHelper(user_pool_id, app_client_id, secretKey);
+		AuthenticationHelper helper = new AuthenticationHelper(user_pool_id,app_client_id, secretKey);
 		//return helper.PerformSRPAuthentication(username, password);
 		
 		
@@ -212,23 +216,37 @@ public class PathController {
 			
 	}
 	
-	/*@RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
-	public ResponseEntity<UserFilesDTO> uploadFile(
-			@RequestParam(value = "file", required = true) MultipartFile file,
-			@RequestParam(value = "fileName", required = true) String fileName,
-			@RequestParam(value = "description", required = false) String description,
-			@RequestParam(value = "userName", required = true) String userName) {
+	@PostMapping("/updatefile")
+	public ResponseEntity updateFile(@RequestPart(value = "file") MultipartFile file, @QueryParam("fileID") String fileID,
+			@QueryParam("filename") String filename,@QueryParam("username") String username) {
 
-		ResponseEntity<CustomerFilesDTO> responseEntity = null;
-		try {
-			CustomerFilesDTO response = fileService.uploadFile(file, fileName, description, userName);
-			responseEntity = new ResponseEntity<CustomerFilesDTO>(response, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			responseEntity = new ResponseEntity<UserFilesDTO>(new UserFilesDTO(),
-					HttpStatus.EXPECTATION_FAILED);
+		boolean updateStatus = false;
+		if (DynamoDBActions.updateFile(Integer.parseInt(fileID))) {
+			if (amazonClient.deleteFileFromS3Bucket(username,filename)) {
+				updateStatus = amazonClient.uploadFile(username, file);
+			}
 		}
-		return responseEntity;
-	}*/
+
+	//	return updateStatus;
+		
+		if (updateStatus) {
+			return ResponseEntity.ok().body("true");
+		} else {
+			return ResponseEntity.badRequest().body("false");
+		}
+
+	}
+	
+	@PostMapping("/deletefile")
+	public ResponseEntity deleteFile(@QueryParam("username") String username,@RequestPart(value = "filename") String fileName) {
+		
+		System.out.println(username+"/"+fileName);
+		if(this.amazonClient.deleteFileFromS3Bucket(username,fileName)) {
+			return ResponseEntity.ok().body("true");
+		}
+		else {
+			return ResponseEntity.badRequest().body("false");
+		}
+		
+	}
 }

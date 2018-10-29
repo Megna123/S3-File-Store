@@ -6,18 +6,19 @@ angular.module('app').factory('UserService', UserService);
 
 		function UserService($http, $q){
 		var service={};
-		service.uploadFile = uploadFile;
-		
+		service.uploadFile = uploadFile;		
 	     service.fetchFiles=fetchFiles;
 	     service.downloadFile=downloadFile;
 	     service.deleteFile=deleteFile;
 	     service.fetchAllFiles=fetchAllFiles;
+	     service.updateFile=updateFile;
+	     service.signup=signup;
 	    // service.fetchAllFiles = fetchAllFiles;
 	     /*service.uploadFile = uploadFile;
 	     service.editFile=editFile;
 	     service.deleteFile=deleteFile;
 	     service.downloadFile=downloadFile;	*/ 
-	     service.signup=signup;
+	   
 	 
 	    return service;
 	 
@@ -59,7 +60,7 @@ angular.module('app').factory('UserService', UserService);
 	    function deleteFile(username,filename) {
 	        var deferred = $q.defer();
 	        console.log(username);
-	        $http.delete('/deletefile?username='+username+'&filename='+filename)
+	        $http.post('/deletefile?username='+username+'&filename='+filename)
 	            .then(
 	            function (response) {
 	            	console.log(response);
@@ -81,7 +82,7 @@ angular.module('app').factory('UserService', UserService);
 	        $http.post(url)
 	            .then(
 	            function (response) {
-	            	console.log(response);
+	            	console.log(response.data);
 	            	deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -92,17 +93,61 @@ angular.module('app').factory('UserService', UserService);
 	        return deferred.promise;
 	    }
 	    
-	    function uploadFile(username,file) {
+	    function uploadFile(username,desc,file) {
 	    	 var fileFormData = new FormData();
 	            fileFormData.append('file', file);
 	        var deferred = $q.defer();
 	        console.log(username);
-	        $http.post('/insertfile?username='+username,fileFormData,{
+	        $http.post('/insertfile?username='+username+'&filedesc='+desc,fileFormData,{
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined} 
             }).then(
 	            function (response) {
 	            	console.log(response);
+	            	deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Files');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+
+	    /******
+	   function downloadFile(username,filename) {
+	        var deferred = $q.defer();
+	        console.log(filename+'    '+filename);
+	        $http.post('/downloadfile?username='+username+'&filename='+filename,{responseType:'arraybuffer'})
+	            .then(
+	            function (response) {
+	            	console.log("File recieved");
+	            	deferred.resolve(response.data);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Files');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }	 
+	    *******/
+	    
+	    function downloadFile(username,filename) {
+	        var deferred = $q.defer();
+	        console.log(filename+'    '+filename);
+	        $http.post('/downloadfile?username='+username+'&filename='+filename,{responseType:'arraybuffer'})
+	            .then(
+	            function (response) {
+	            	//chcek
+	            	var bytes = new Uint8Array(response);
+	            	var blob = new Blob([bytes], {type: "application/pdf"});
+	            	var link = document.createElement("a");
+	            	link.href = window.URL.createObjectURL(blob);
+	            	link.download = filename;
+	            	link.click();           	
+	            	
+	            	console.log("File recieved");
 	            	deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -112,13 +157,19 @@ angular.module('app').factory('UserService', UserService);
 	        );
 	        return deferred.promise;
 	    }
-	    function downloadFile(filename) {
+	    
+	    
+	    function updateFile(fileID,filename,username,file) {
+	    	var fileFormData = new FormData();
+            fileFormData.append('file', file);
 	        var deferred = $q.defer();
 	        console.log(filename+'    '+filename);
-	        $http.post('/downloadfile?filename='+filename,{responseType:'arraybuffer'})
-	            .then(
+	        $http.post('/updatefile?fileID='+fileID+'&filename'+filename+'&username'+username,fileFormData,{
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined} 
+            }).then(
 	            function (response) {
-	            	console.log("File receved");
+	            	console.log("File Updated");
 	            	deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -127,7 +178,7 @@ angular.module('app').factory('UserService', UserService);
 	            }
 	        );
 	        return deferred.promise;
-	    }	    
+	    }	
 	   
 	 }
 })();

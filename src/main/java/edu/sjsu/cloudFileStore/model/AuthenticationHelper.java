@@ -126,7 +126,7 @@ public class AuthenticationHelper {
         } while (A.mod(N).equals(BigInteger.ZERO));
 
         this.userPoolID = userPoolID;
-        this.clientId = clientid;
+       this.clientId = clientid;
         this.region = "us-east-2";
         this.secretKey = secretKey;
 

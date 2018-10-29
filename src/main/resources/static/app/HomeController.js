@@ -62,7 +62,7 @@
 
 
 		$scope.download = function (filename){
-			UserService.downloadFile(filename)
+			UserService.downloadFile(currentUser,filename)
 			.then(
 					function(d) {
 						console.log("File downloaded");
@@ -79,7 +79,31 @@
 			var currentUser = $rootScope.globals.currentUser.username;				
 			var file = $scope.myFile;
 			console.log($scope.myFile);			 
-			UserService.uploadFile(currentUser,$scope.myFile)
+			UserService.uploadFile(currentUser,$scope.desc,$scope.myFile)
+			.then(
+					function(d) {
+						console.log(d);
+						if(currentUser=='admin'){
+							fetchAllFile(currentUser);
+						}else{
+							fetchFiles(currentUser);
+						}
+					},
+					function(errResponse){
+						console.error('Error while fetching Users');
+					}
+			);
+
+
+
+		};
+
+		
+		$scope.updateFile = function (fileID,filename) {	            
+			var currentUser = $rootScope.globals.currentUser.username;				
+			var file = $scope.uploadfilemodel;
+			console.log($scope.uploadfilemodel);			 
+			UserService.updateFile(fileID,filename,currentUser,$scope.uploadfilemodel)
 			.then(
 					function(d) {
 						console.log(d);

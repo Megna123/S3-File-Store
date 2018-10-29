@@ -9,6 +9,7 @@ public class FileUploader {
 	private String UserName;
 	private String FileUploadTime;
 	private String FileUpdatedTime;
+	private String FileDescription;
 	
 	public String getFileID() {
 		return FileID;
@@ -51,6 +52,12 @@ public class FileUploader {
 	}
 	public void setFileUpdatedTime(String fileUpdatedTime) {
 		FileUpdatedTime = fileUpdatedTime;
+	}
+	public String getFileDescription() {
+		return FileDescription;
+	}
+	public void setFileDescription(String fileDescription) {
+		FileDescription = fileDescription;
 	}
 
 }
