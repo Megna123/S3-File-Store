@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../../scripts/bootstrap.min.css"></link>
+<script src="../../scripts/angular.min.js"></script>
+<script src="../../scripts/angular-route.min.js"></script>
+<script src="../../scripts/jquery-3.3.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../app/appController.js"></script>
+<script src="../../app/HomeController.js"></script>
+<script src="../../app/FileUploadDirective.js"></script>
+<script src="../../app/Userservice.js"></script>
+<!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		 -->
+</head>
+
+<body ng-controller="HomeController as ctrl">
+
+	<div class="container" ng-controller="HomeController as ctrl">
+		<div class="panel-body">
+			<h2 class="text-left">File Manager</h2>
+			<div class="text-right">
+				<a href="#/login" class="btn btn-link">Logout</a>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+
+				<div class="form-group">
+					<label for="myFileField">Select a file: </label> 
+					<input type="file" id="myFile" file-model="myFile"/>
+				</div>
+				<form class="form-inline">
+					<div class="form-group">
+						<label for="exampleInputName2">Description</label> <input
+							type="text" class="form-control" id="exampleInputName2"
+							placeholder="Enter description">
+					</div>
+
+					<button ng-click="uploadFile()" class="btn btn-primary">Upload
+						File</button>
+				</form>
+
+			</div>
+		</div>
+<!-- div ng-show="error" class="alert alert-danger">{{error}}</div-->
+	
+		<div class="generic-container">
+			<div class="panel panel-default">
+				<div class="tablecontainer">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>ID.</th>
+								<th>Name</th>
+								<th>Address</th>
+								<th>Email</th>
+								<th width="20%"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="f in ctrl.files">
+								<td><span ng-bind="f.fileName"></span></td>
+								<td><span ng-bind="f.userName"></span></td>
+								<td><span ng-bind="f.fileID"></span></td>
+								<td><span ng-bind="f.firstName"></span></td>
+								<td>
+									<button type="button" ng-click="edit(f.fileName)"
+										class="btn btn-info btn-sm" data-toggle="modal"
+										data-target="#editModal">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</button>
+
+									<button type="button" ng-click="download(f.fileName)"
+										class="btn btn-success btn-sm">
+										<span class="glyphicon glyphicon-download-alt"></span>
+									</button>
+									<button type="button" ng-click="delete(f.fileName)"
+										class="btn btn-danger btn-sm" data-toggle="modal"
+										data-target="#deleteModal">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+
+
+</html>
