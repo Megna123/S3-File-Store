@@ -21,7 +21,8 @@ This sample includes:
   installing and deploying your application on the Amazon EC2 instance
 * template.yml - this file contains the description of AWS resources used by AWS
   CloudFormation to deploy your infrastructure
-=====================================================
+  
+==========================================================================================================================================
 
 University Name: http://www.sjsu.edu/ 
 
