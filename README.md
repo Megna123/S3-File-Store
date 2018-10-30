@@ -24,9 +24,15 @@ This sample includes:
 =====================================================
 
 University Name: http://www.sjsu.edu/ 
+
 Course: Cloud Technologies
+
 Professor: Sanjay Garje
+
 ISA: Anushri Srinath Aithal 
+
 Student: Meghana Yoganarasimha ()
+
 Project Introduction : The project requirement was to develop a 3 tier web application using AWS services.The codebase ensures multiple users can maintain a file repository using AWS S3 buckets. We have also enabled facebook login for the application,wherein an user can login to our application via facebook and upload files that needs to be stored.
+
 Sample Demo Screenshots:
