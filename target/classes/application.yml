@@ -1,11 +1,1 @@
-amazonProperties:
-  endpointUrl: https://s3.us-east-2.amazonaws.com
-  accessKey: AKIAIZBLO75NYFJCOMOQ
-  secretKey: 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
-  bucketName: s3cloudfilestorewebapp
-  app_client_id: 3odv32euabekk9qof2m1p7uplc
-  user_pool_id: us-east-2_fs0kXUq9l
-  
-  multipart:
-    maxFileSize: 10Mb
-    maxRequestSize: 10Mb
+
