@@ -19,6 +19,19 @@ The application has  an admin login which lists all the files providing al the m
 
 Sample Demo Screenshots:
 
+Login Screen:
+
+![screen1](https://user-images.githubusercontent.com/32143377/48788423-a8c15d80-ec9f-11e8-9db9-da3ad77d9136.png)
+
+Home Screen:
+
+![screen2](https://user-images.githubusercontent.com/32143377/48788628-0fdf1200-eca0-11e8-926e-3d314f727e8e.png)
+
+
+
+
+
+
 
 
     
