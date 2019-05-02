@@ -20,7 +20,7 @@ The application has  an admin login which lists all the files providing al the m
 **Architecture:
 ![image](https://user-images.githubusercontent.com/32143377/57052474-3dab8800-6c3c-11e9-8a53-ed3b9292af20.png)
 
-Sample Demo Screenshots:
+**Sample Demo Screenshots:
 
 Login Screen:
 
